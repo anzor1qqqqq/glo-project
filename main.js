@@ -1,6 +1,6 @@
 'use strict'
 
-let title;
+let title = 1;
 let screens;
 let screenPrice;
 let rollback;
