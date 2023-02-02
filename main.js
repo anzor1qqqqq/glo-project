@@ -11,7 +11,6 @@ console.log(typeof(title), typeof(fullPrice), typeof(adaptive));
 console.log(screens.length);
 console.log( `Стоимость верстки экранов ${screenPrice} рублей и Стоимость разработки сайта ${fullPrice} рублей`);
 
-screens.toLowerCase();
 const arr = screens.toLowerCase().split();
 console.log(arr);
 
