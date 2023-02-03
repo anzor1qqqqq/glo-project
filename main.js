@@ -2,16 +2,10 @@
 
 const title = prompt('Как называется ваш проект?'),
     screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные'),
-    screenPrice = prompt('Сколько будет стоить данная работа?', '12000'),
-    adaptive = confirm('Нужен ли адаптив на сайте?');
+    adaptive = confirm('Нужен ли адаптив на сайте?'),
+    screenPrice = prompt('Сколько будет стоить данная работа?', '12000');
 
-let service1 = confirm('Нужно создать макет сайта?(10000)');
-service1 = service1 ? 10000 : 0;
-
-let service2 = confirm('Подключить платежную систему?(12000)');
-service2 = service2 ? 12000 : 0;
-
-let fullPrice = +screenPrice + service1 + service2; 
+let fullPrice = +screenPrice; 
 
 switch (true) {
     case fullPrice > 30000:
@@ -32,5 +26,5 @@ switch (true) {
         break;
 }; 
 
-const servicePercentPrice = Math.ceil(fullPrice - 1000);
+const servicePercentPrice = Math.ceil(fullPrice - (fullPrice * 0.1));
 console.log('servicePercentPrice: ', servicePercentPrice);
