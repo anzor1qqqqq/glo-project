@@ -1,13 +1,32 @@
 'use strict'
 
-const service1 = 1500;
-const service2 = 1900;
-let title = prompt('Как называется ваш проект?'),
-    screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные'),
-    adaptive = confirm('Нужен ли адаптив на сайте?'),
-    screenPrice = prompt('Сколько будет стоить данная работа?', '12000');
+const reg = /^\d+$/;
+let title = prompt('Как называется ваш проект?');
+let screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные');
+let adaptive = confirm('Нужен ли адаптив на сайте?');
+
+let screenPrice;
+do {
+    screenPrice = +prompt('Сколько будет стоить данная работа?', '12000');
+} while (false);
+
+let service1 = prompt('Какой дополнительный тип услуги нужен?');
+let servicePrice1 = prompt('Сколько это будет стоить?');
+while(!protectNum(servicePrice1)) {
+    servicePrice1 = prompt('Сколько это будет стоить?');
+};
+
+let service2 = prompt('Какой дополнительный тип услуги нужен?');
+let servicePrice2 = prompt('Сколько это будет стоить?');
+while(!protectNum(servicePrice2)) {
+    servicePrice2 = prompt('Сколько это будет стоить?');
+};
 
 console.log('screens: ', screens);
+
+function protectNum(num) {
+    return reg.test(num);
+};
 
 const allServicePrices = function getAllServicePrices (a, b) {
     return a + b;
@@ -17,7 +36,7 @@ function getFullPrice(a, b) {
     return a + b;
 };
 
-let fullPrice = getFullPrice(+screenPrice, allServicePrices(service1, service2));
+let fullPrice = getFullPrice(screenPrice, allServicePrices(+servicePrice1, +servicePrice2));
 
 switch (true) {
     case fullPrice > 30000:
@@ -41,8 +60,8 @@ switch (true) {
 function getTitle() {
     if (title)  {
         title = title.trim();
-        document.title = title[0].toUpperCase() + title.slice(1).toLowerCase(); 
-    }
+        console.log(title[0].toUpperCase() + title.slice(1).toLowerCase());
+    };
 };
 
 const servicePercentPrice = function getServicePercentPrices() {
