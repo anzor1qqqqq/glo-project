@@ -1,4 +1,4 @@
-'use strict'
+/* 'use strict'
 
 const reg = /^\d+$/;
 let title = prompt('Как называется ваш проект?');
@@ -71,4 +71,10 @@ const servicePercentPrice = function getServicePercentPrices() {
 getTitle();
 servicePercentPrice();
 
-console.log('servicePercentPrice: ', servicePercentPrice());
+console.log('servicePercentPrice: ', servicePercentPrice()); */
+
+let arr = [1, 2, 2, 3];
+
+for (let key of arr) {
+    console.log(key);
+}
