@@ -1,80 +1,103 @@
-/* 'use strict'
+'use strict'
 
 const reg = /^\d+$/;
-let title = prompt('Как называется ваш проект?');
-let screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные');
-let adaptive = confirm('Нужен ли адаптив на сайте?');
 
-let screenPrice;
-do {
-    screenPrice = +prompt('Сколько будет стоить данная работа?', '12000');
-} while (false);
+const appData = {
+    start: function() {
+        this.asking();
+        this.logger();
+    },
 
-let service1 = prompt('Какой дополнительный тип услуги нужен?');
-let servicePrice1 = prompt('Сколько это будет стоить?');
-while(!protectNum(servicePrice1)) {
-    servicePrice1 = prompt('Сколько это будет стоить?');
-};
+    title: '',
+    screens: '',
+    adaptive: true,
+    screenPrice: 0,
+    service1: '',
+    servicePrice1: 0,
+    service2: '',
+    servicePrice2: 0,
+    fullPrice: 0,
 
-let service2 = prompt('Какой дополнительный тип услуги нужен?');
-let servicePrice2 = prompt('Сколько это будет стоить?');
-while(!protectNum(servicePrice2)) {
-    servicePrice2 = prompt('Сколько это будет стоить?');
-};
+    asking: function() {
+        this.title = prompt('Как называется ваш проект?');
+        this.screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные');
+        this.adaptive = confirm('Нужен ли адаптив на сайте?');
 
-console.log('screens: ', screens);
+        do {
+            this.screenPrice = +prompt('Сколько будет стоить данная работа?', '12000');
+        } while (false);
 
-function protectNum(num) {
-    return reg.test(num);
-};
+        this.service1 = prompt('Какой дополнительный тип услуги нужен?');
+        this.servicePrice1 = prompt('Сколько это будет стоить?');
 
-const allServicePrices = function getAllServicePrices (a, b) {
-    return a + b;
-};
+        while(!this.fooProgram.protectNum(this.servicePrice1)) {
+            this.servicePrice1 = prompt('Сколько это будет стоить?');
+        };
 
-function getFullPrice(a, b) {
-    return a + b;
-};
+        this.service2 = prompt('Какой дополнительный тип услуги нужен?');
+        this.servicePrice2 = prompt('Сколько это будет стоить?');
 
-let fullPrice = getFullPrice(screenPrice, allServicePrices(+servicePrice1, +servicePrice2));
+        while(!this.fooProgram.protectNum(this.servicePrice2)) {
+            this.servicePrice2 = prompt('Сколько это будет стоить?');
+        };
 
-switch (true) {
-    case fullPrice > 30000:
-        fullPrice -= fullPrice * 0.1;
-        alert('Сумма заказа составила больше 30000 рублей, в связи с этим делаем вам скидку 10%');
-        break;
-    case fullPrice > 15000 && fullPrice < 30000:
-        fullPrice -= fullPrice * 0.05;
-        alert('Сумма заказа составила больше 15000 рублей, в связи с этим делаем вам скидку 5%');
-        break;
-    case fullPrice < 15000 && fullPrice > 0: 
-        alert('Скидка не предусмотрена');
-        break;
-    case fullPrice <= 1000:
-        alert('Что-то пошло не так');
-        break;
-    default:
-        break;
-};
 
-function getTitle() {
-    if (title)  {
-        title = title.trim();
-        console.log(title[0].toUpperCase() + title.slice(1).toLowerCase());
-    };
-};
 
-const servicePercentPrice = function getServicePercentPrices() {
-    return Math.ceil(fullPrice - (fullPrice * 0.1));
-};
+        this.fullPrice = this.fooProgram.getFullPrice(this.screenPrice, this.fooProgram.allServicePrices(+this.servicePrice1, +this.servicePrice2));
 
-getTitle();
-servicePercentPrice();
+        switch (true) {
+            case this.fullPrice > 30000:
+                this.fullPrice -= this.fullPrice * 0.1;
+                alert('Сумма заказа составила больше 30000 рублей, в связи с этим делаем вам скидку 10%');
+                break;
+            case this.fullPrice > 15000 && this.fullPrice < 30000:
+                this.fullPrice -= this.fullPrice * 0.05;
+                alert('Сумма заказа составила больше 15000 рублей, в связи с этим делаем вам скидку 5%');
+                break;
+            case this.fullPrice < 15000 && this.fullPrice > 0: 
+                alert('Скидка не предусмотрена');
+                break;
+            case this.fullPrice <= 1000:
+                alert('Что-то пошло не так');
+                break;
+            default:
+                break;
+        };
 
-console.log('servicePercentPrice: ', servicePercentPrice()); */
+        this.fooProgram.getTitle();
+        this.fooProgram.servicePercentPrice(); 
+    },
 
-let arr = [1, 2, 2, 3];
+    fooProgram: {
+        protectNum: function(num) {
+            return reg.test(num);
+        },
 
-for (let key of arr) {
-    console.log(key);
-}
+        allServicePrices: function getAllServicePrices(a, b) {
+            return Number(a + b);
+        },
+
+        getFullPrice: function(a, b) {
+            return a + b;
+        },
+
+        getTitle: function() {
+            if (appData.title)  {  
+                appData.title = appData.title.trim();
+                appData.title = appData.title[0].toUpperCase() + appData.title.slice(1).toLowerCase() ;
+            };
+        },
+
+        servicePercentPrice: function getServicePercentPrices() {
+            appData.fullPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * 0.1));
+        },
+    },
+
+    logger: function () {
+        for (const key in appData) {
+            console.log(appData[key]);
+        };
+    },
+};   
+
+appData.start();
