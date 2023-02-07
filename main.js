@@ -9,41 +9,69 @@ const appData = {
     },
 
     title: '',
-    screens: '',
+    screens: [],
     adaptive: true,
-    screenPrice: 0,
-    service1: '',
-    servicePrice1: 0,
-    service2: '',
-    servicePrice2: 0,
+    services: {},
     fullPrice: 0,
 
     asking: function() {
+        let screenPrice;
+        let servicePrice;
+
         this.title = prompt('Как называется ваш проект?');
-        this.screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные');
+
+        while (!isNaN(this.title.trim()) && typeof(this.title.trim()) === 'string') {
+            this.title = prompt('Как называется ваш проект?');  
+        }; 
+
+        for (let i = 0; i < 2; i++) {
+            let screenInfo = prompt('Какие типы экранов нужно разработать?');
+
+            while (!isNaN(screenInfo.trim()) && typeof(screenInfo.trim()) === 'string') {
+                screenInfo = prompt('Какие типы экранов нужно разработать?');
+            };
+
+            screenPrice = prompt('Сколько будет стоить данная работа?');
+
+            while (!this.fooProgram.protectNum(screenPrice)) {
+                screenPrice = prompt('Сколько будет стоить данная работа?');
+            };
+
+            this.screens.push({name: screenInfo, price: screenPrice});
+        };
+
         this.adaptive = confirm('Нужен ли адаптив на сайте?');
 
         do {
-            this.screenPrice = +prompt('Сколько будет стоить данная работа?', '12000');
-        } while (false);
+            screenPrice = prompt('Сколько будет стоить данная работа?', '12000');
+        } while (!this.fooProgram.protectNum(screenPrice));
+        
+        for (let i = 0; i < 2; i++) {
+            let service = prompt('Какой дополнительный тип услуги нужен?');
 
-        this.service1 = prompt('Какой дополнительный тип услуги нужен?');
-        this.servicePrice1 = prompt('Сколько это будет стоить?');
+            while (!isNaN(service.trim()) && typeof(service.trim()) === 'string') {
+                service = prompt('Какой дополнительный тип услуги нужен?');
+            };
 
-        while(!this.fooProgram.protectNum(this.servicePrice1)) {
-            this.servicePrice1 = prompt('Сколько это будет стоить?');
+            servicePrice = prompt('Сколько это будет стоить?');
+
+            while (!this.fooProgram.protectNum(servicePrice)) {
+                servicePrice = prompt('Сколько это будет стоить?');
+            };   
+
+            this.services[service] = servicePrice;
         };
 
-        this.service2 = prompt('Какой дополнительный тип услуги нужен?');
-        this.servicePrice2 = prompt('Сколько это будет стоить?');
+        screenPrice = this.screens.reduce((elem, item) => {
+            return elem + +item.price;
+        }, 0);
 
-        while(!this.fooProgram.protectNum(this.servicePrice2)) {
-            this.servicePrice2 = prompt('Сколько это будет стоить?');
+
+        for (let key in this.services) {
+            servicePrice += +this.services[key];
         };
 
-
-
-        this.fullPrice = this.fooProgram.getFullPrice(this.screenPrice, this.fooProgram.allServicePrices(+this.servicePrice1, +this.servicePrice2));
+        this.fullPrice = this.fooProgram.getFullPrice(screenPrice, servicePrice);
 
         switch (true) {
             case this.fullPrice > 30000:
