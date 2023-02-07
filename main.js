@@ -20,14 +20,14 @@ const appData = {
 
         this.title = prompt('Как называется ваш проект?');
 
-        while (!isNaN(this.title.trim()) && typeof(this.title.trim()) === 'string') {
+        while (!isNaN(this.title.trim())) {
             this.title = prompt('Как называется ваш проект?');  
         }; 
 
         for (let i = 0; i < 2; i++) {
             let screenInfo = prompt('Какие типы экранов нужно разработать?');
 
-            while (!isNaN(screenInfo.trim()) && typeof(screenInfo.trim()) === 'string') {
+            while (!isNaN(screenInfo.trim())) {
                 screenInfo = prompt('Какие типы экранов нужно разработать?');
             };
 
@@ -49,7 +49,7 @@ const appData = {
         for (let i = 0; i < 2; i++) {
             let service = prompt('Какой дополнительный тип услуги нужен?');
 
-            while (!isNaN(service.trim()) && typeof(service.trim()) === 'string') {
+            while (!isNaN(service.trim())) {
                 service = prompt('Какой дополнительный тип услуги нужен?');
             };
 
