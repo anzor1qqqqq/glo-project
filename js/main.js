@@ -1,4 +1,4 @@
-'use strict'
+/* 'use strict'
 
 const reg = /^\d+$/;
 
@@ -128,4 +128,9 @@ const appData = {
     },
 };   
 
-appData.start();
+appData.start(); */
+
+
+const elemTitle = document.querySelector('.title');
+
+console.log(getComputedStyle(elemTitle).backgroundColor);
