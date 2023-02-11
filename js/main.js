@@ -33,7 +33,7 @@ const appData = {
     servicesProcentPrice: 0,
     ScreenPrice: 0,
     fullPrice: 0,
-    rollbackPrice: 0,
+    addPrices : 0,
 
     start: function() {
         this.fooProgram.init();
@@ -52,9 +52,12 @@ const appData = {
             this.servicesProcentPrice += this.ScreenPrice * (this.servicesProcent[key] / 100);
         };
 
+        console.log(this.ScreenPrice);
+        console.log(this.servicesProcentPrice);
+        console.log(this.servicesNumberPrice); 
         this.fullPrice = this.servicesProcentPrice + this.servicesNumberPrice + this.ScreenPrice;
         
-        this.rollbackPrice = Math.ceil(this.fullPrice + (this.fullPrice * (this.rollback / 100)));
+        this.addPrices  = Math.ceil(this.fullPrice + (this.fullPrice * (this.rollback / 100)));
     },
 
     fooProgram: {
@@ -77,7 +80,7 @@ const appData = {
             totalInputPrice.value = appData.ScreenPrice;
             totalInputAddPrice.value = appData.servicesProcentPrice + appData.servicesNumberPrice;
             totalInputFullPrice.value = appData.fullPrice;  
-            totalInputFullPricePercent.value = appData.rollbackPrice;
+            totalInputFullPricePercent.value = appData.addPrices;
         },
 
         addService: function() {
@@ -146,12 +149,24 @@ const appData = {
                         price: +priceScreen.value * +quantyScreen.value,
                         count: +quantyScreen.value,
                     });
-
-                    appData.fooProgram.addService();
-                    appData.asking();
-                    appData.fooProgram.showPrice();
                 };
             });
+
+            if (protect === true) {
+                appData.fooProgram.addService();
+                appData.asking();
+                appData.fooProgram.showPrice();
+            };
+
+            appData.screens = [];
+            appData.servicesNumber = {};
+            appData.servicesProcent = {};
+            appData.rollback = 0;
+            appData.servicesNumberPrice = 0;
+            appData.servicesProcentPrice = 0;
+            appData.ScreenPrice = 0;
+            appData.fullPrice = 0;
+            appData.addPrices  = 0;
         },
     },
 };   
