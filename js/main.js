@@ -52,11 +52,7 @@ const appData = {
             this.servicesProcentPrice += this.ScreenPrice * (this.servicesProcent[key] / 100);
         };
 
-        console.log(this.ScreenPrice);
-        console.log(this.servicesProcentPrice);
-        console.log(this.servicesNumberPrice); 
         this.fullPrice = this.servicesProcentPrice + this.servicesNumberPrice + this.ScreenPrice;
-        
         this.addPrices  = Math.ceil(this.fullPrice + (this.fullPrice * (this.rollback / 100)));
     },
 
