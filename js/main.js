@@ -54,7 +54,7 @@ const appData = {
 
         this.fullPrice = this.servicesProcentPrice + this.servicesNumberPrice + this.ScreenPrice;
         
-        this.rollbackPrice = Math.ceil(this.fullPrice + (this.fullPrice * (this.rollback * 0.1)));
+        this.rollbackPrice = Math.ceil(this.fullPrice + (this.fullPrice * (this.rollback / 100)));
     },
 
     fooProgram: {
@@ -117,8 +117,6 @@ const appData = {
         },
 
         Fooprotect: function(a, b, c) {
-            console.log(c.length);
-
             for (let i = 0; i < c.length; i++) {
                 if (b[i].value !== '' && a[i].selectedIndex !== 0) {
                     protect = true;
@@ -135,7 +133,7 @@ const appData = {
                 const priceScreen = item.querySelectorAll('[name="views-select"] > option')[item.querySelector('[name="views-select"]').selectedIndex];
                 const quantyScreen = item.querySelector('[type="text"]');
 
-                const protectElemText = document.querySelectorAll('.main-controls__select > .views_select_screen')/* [document.querySelector('[name="views-select"]').selectedIndex] */;
+                const protectElemText = document.querySelectorAll('.main-controls__select > .views_select_screen');
                 const protectElemNumber = document.querySelectorAll('[type="text"]');
                 const elem = document.querySelectorAll('.screen');
 
