@@ -1,130 +1,160 @@
 'use strict'
 
-const reg = /^\d+$/;
+const titleContainer = document.getElementsByTagName('h1')[0];
+const screenBtn = document.querySelector('.screen-btn'); 
+
+const otherItemsProcent = document.querySelectorAll('.other-items.percent');
+const otherItemsNumber = document.querySelectorAll('.other-items.number');
+const hiddenCmsVariants = document.querySelector('.hidden-cms-variants');
+
+const inputRange = document.querySelector('.rollback > .main-controls__range > [type="range"]');
+const spanRange = document.querySelector('.rollback > .main-controls__range > .range-value');
+
+const startBtn = document.getElementsByClassName('handler_btn')[0];
+const resetBtn = document.getElementsByClassName('handler_btn')[1];
+ 
+const totalInputPrice = document.getElementsByClassName('total-input')[0];
+const totalInputQuanty = document.getElementsByClassName('total-input')[1];
+const totalInputAddPrice = document.getElementsByClassName('total-input')[2];
+const totalInputFullPrice = document.getElementsByClassName('total-input')[3];
+const totalInputFullPricePercent = document.getElementsByClassName('total-input')[4];
+
+let screenElem = document.querySelectorAll('.screen');
+let protect;
 
 const appData = {
+    title: '',
+    adaptive: true,
+    screens: [],
+    servicesNumber: {},
+    servicesProcent: {},
+    rollback: 0,
+    servicesNumberPrice: 0,
+    servicesProcentPrice: 0,
+    ScreenPrice: 0,
+    fullPrice: 0,
+    rollbackPrice: 0,
+
     start: function() {
-        this.asking();
-        this.logger();
+        this.fooProgram.init();
     },
 
-    title: '',
-    screens: [],
-    adaptive: true,
-    services: {},
-    fullPrice: 0,
-
     asking: function() {
-        let screenPrice;
-        let servicePrice;
-
-        this.title = prompt('Как называется ваш проект?');
-
-        while (!isNaN(this.title.trim())) {
-            this.title = prompt('Как называется ваш проект?');  
-        }; 
-
-        for (let i = 0; i < 2; i++) {
-            let screenInfo = prompt('Какие типы экранов нужно разработать?');
-
-            while (!isNaN(screenInfo.trim())) {
-                screenInfo = prompt('Какие типы экранов нужно разработать?');
-            };
-
-            screenPrice = prompt('Сколько будет стоить данная работа?');
-
-            while (!this.fooProgram.protectNum(screenPrice)) {
-                screenPrice = prompt('Сколько будет стоить данная работа?');
-            };
-
-            this.screens.push({name: screenInfo, price: screenPrice});
+        for (let key of this.screens) {
+            this.ScreenPrice += key.price;
         };
 
-        this.adaptive = confirm('Нужен ли адаптив на сайте?');
+        for (let key in this.servicesNumber) {
+            this.servicesNumberPrice += this.servicesNumber[key];
+        }
 
-        do {
-            screenPrice = prompt('Сколько будет стоить данная работа?', '12000');
-        } while (!this.fooProgram.protectNum(screenPrice));
+        for (let key in this.servicesProcent) {
+            this.servicesProcentPrice += this.ScreenPrice * (this.servicesProcent[key] / 100);
+        };
+
+        this.fullPrice = this.servicesProcentPrice + this.servicesNumberPrice + this.ScreenPrice;
         
-        for (let i = 0; i < 2; i++) {
-            let service = prompt('Какой дополнительный тип услуги нужен?');
-
-            while (!isNaN(service.trim())) {
-                service = prompt('Какой дополнительный тип услуги нужен?');
-            };
-
-            servicePrice = prompt('Сколько это будет стоить?');
-
-            while (!this.fooProgram.protectNum(servicePrice)) {
-                servicePrice = prompt('Сколько это будет стоить?');
-            };   
-
-            this.services[service] = servicePrice;
-        };
-
-        screenPrice = this.screens.reduce((elem, item) => {
-            return elem + +item.price;
-        }, 0);
-
-
-        for (let key in this.services) {
-            servicePrice += +this.services[key];
-        };
-
-        this.fullPrice = this.fooProgram.getFullPrice(screenPrice, servicePrice);
-
-        switch (true) {
-            case this.fullPrice > 30000:
-                this.fullPrice -= this.fullPrice * 0.1;
-                alert('Сумма заказа составила больше 30000 рублей, в связи с этим делаем вам скидку 10%');
-                break;
-            case this.fullPrice > 15000 && this.fullPrice < 30000:
-                this.fullPrice -= this.fullPrice * 0.05;
-                alert('Сумма заказа составила больше 15000 рублей, в связи с этим делаем вам скидку 5%');
-                break;
-            case this.fullPrice < 15000 && this.fullPrice > 0: 
-                alert('Скидка не предусмотрена');
-                break;
-            case this.fullPrice <= 1000:
-                alert('Что-то пошло не так');
-                break;
-            default:
-                break;
-        };
-
-        this.fooProgram.getTitle();
-        this.fooProgram.servicePercentPrice(); 
+        this.rollbackPrice = Math.ceil(this.fullPrice + (this.fullPrice * (this.rollback * 0.1)));
     },
 
     fooProgram: {
-        protectNum: function(num) {
-            return reg.test(num);
+        init: function() {
+            this.addTitle();
+            this.rollbackInput();
+            screenBtn.addEventListener('click', this.addinputScreen);
+            startBtn.addEventListener('click', this.addScreen);
         },
 
-        allServicePrices: function getAllServicePrices(a, b) {
-            return Number(a + b);
+        addTitle: function() {
+            document.title = titleContainer.textContent;
         },
 
-        getFullPrice: function(a, b) {
-            return a + b;
+        showPrice: function() {
+            totalInputQuanty.value = appData.screens.reduce((elem, index) => {
+                return elem + index.count;
+            }, 0);
+
+            totalInputPrice.value = appData.ScreenPrice;
+            totalInputAddPrice.value = appData.servicesProcentPrice + appData.servicesNumberPrice;
+            totalInputFullPrice.value = appData.fullPrice;  
+            totalInputFullPricePercent.value = appData.rollbackPrice;
         },
 
-        getTitle: function() {
-            if (appData.title)  {  
-                appData.title = appData.title.trim();
-                appData.title = appData.title[0].toUpperCase() + appData.title.slice(1).toLowerCase() ;
+        addService: function() {
+            otherItemsProcent.forEach(item => {
+                const serviceProcentText = item.querySelector('label').textContent;
+                const checkboxBtn = item.querySelector('[type="checkbox"]');
+                const priceServiceProcent = item.querySelector('.main-controls__input > [type = "text"]').value;
+                
+                if (checkboxBtn.checked) appData.servicesProcent[serviceProcentText] = +priceServiceProcent;
+            });
+
+            otherItemsNumber.forEach(item => {
+                const serviceNumberText = item.querySelector('label').textContent;
+                const checkboxBtn = item.querySelector('[type="checkbox"]');
+                const priceServiceNumber = item.querySelector('.main-controls__input > [type = "text"]').value;
+                
+                if (checkboxBtn.checked) appData.servicesNumber[serviceNumberText] = +priceServiceNumber;
+            });
+        },
+
+        addinputScreen: function() {
+            const screenCloneElem = screenElem[0].cloneNode(true);
+
+            if (screenElem.length !== 7) screenElem[screenElem.length - 1].after(screenCloneElem);
+
+            screenElem = document.querySelectorAll('.screen');
+        },
+
+        rollbackInput: function() {
+            inputRange.addEventListener('input', event => {
+                spanRange.textContent = event.target.value + '%';
+            }); 
+
+            inputRange.addEventListener('change', () => {
+                appData.rollback = parseInt(spanRange.textContent);
+            }); 
+        },
+
+        Fooprotect: function(a, b, c) {
+            console.log(c.length);
+
+            for (let i = 0; i < c.length; i++) {
+                if (b[i].value !== '' && a[i].selectedIndex !== 0) {
+                    protect = true;
+                }  else {
+                    protect = false;
+                    break;
+                };
             };
         },
 
-        servicePercentPrice: function getServicePercentPrices() {
-            appData.fullPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * 0.1));
-        },
-    },
+        addScreen: function() {
+            screenElem.forEach((item, index) => {
+                const nameScreen = item.querySelectorAll('[name="views-select"] > option')[item.querySelector('[name="views-select"]').selectedIndex];
+                const priceScreen = item.querySelectorAll('[name="views-select"] > option')[item.querySelector('[name="views-select"]').selectedIndex];
+                const quantyScreen = item.querySelector('[type="text"]');
 
-    logger: function () {
-        for (const key in appData) {
-            console.log(appData[key]);
-        };
+                const protectElemText = document.querySelectorAll('.main-controls__select > .views_select_screen')/* [document.querySelector('[name="views-select"]').selectedIndex] */;
+                const protectElemNumber = document.querySelectorAll('[type="text"]');
+                const elem = document.querySelectorAll('.screen');
+
+                appData.fooProgram.Fooprotect(protectElemText, protectElemNumber, elem);
+
+                if (protect === true) {
+                    appData.screens.push({
+                        id: index,
+                        name: nameScreen.textContent, 
+                        price: +priceScreen.value * +quantyScreen.value,
+                        count: +quantyScreen.value,
+                    });
+
+                    appData.fooProgram.addService();
+                    appData.asking();
+                    appData.fooProgram.showPrice();
+                };
+            });
+        },
     },
 };   
 
