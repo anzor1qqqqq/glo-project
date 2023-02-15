@@ -22,6 +22,14 @@ const totalInputFullPricePercent = document.getElementsByClassName('total-input'
 let screenElem = document.querySelectorAll('.screen');
 let protect;
 
+const cmsElem = document.querySelectorAll('.cms');
+const cmsOpen = document.querySelector('#cms-open');
+const cmsSelect = document.querySelector('#cms-select'); 
+const mainControlsInput = document.querySelector('.hidden-cms-variants > .main-controls__input');
+const inputCmsProcent = mainControlsInput.querySelector('#cms-other-input');
+
+const customCheckbox = document.querySelectorAll('.custom-checkbox');
+
 const appData = {
     title: '',
     adaptive: true,
@@ -29,9 +37,11 @@ const appData = {
     servicesNumber: {},
     servicesProcent: {},
     rollback: 0,
+    cmsProcent: {},
     servicesNumberPrice: 0,
     servicesProcentPrice: 0,
     ScreenPrice: 0,
+    cmsProcentPrice: 0,
     fullPrice: 0,
     addPrices : 0,
 
@@ -53,7 +63,7 @@ const appData = {
         };
 
         this.fullPrice = this.servicesProcentPrice + this.servicesNumberPrice + this.ScreenPrice;
-        this.addPrices  = Math.ceil(this.fullPrice + (this.fullPrice * (this.rollback / 100)));
+        this.addPrices = Math.ceil(this.fullPrice + (this.fullPrice * ((this.rollback + this.cmsProcentPrice)  / 100)));
     },
 
     fooProgram: {
@@ -70,6 +80,7 @@ const appData = {
             totalInputAddPrice.value = appData.servicesProcentPrice + appData.servicesNumberPrice;
             totalInputFullPrice.value = appData.fullPrice;  
             totalInputFullPricePercent.value = appData.addPrices;
+            
         },
 
         addService: () => {
@@ -87,6 +98,18 @@ const appData = {
                 const priceServiceNumber = item.querySelector('.main-controls__input > [type = "text"]').value;
                 
                 if (checkboxBtn.checked) appData.servicesNumber[serviceNumberText] = +priceServiceNumber;
+            });
+
+            cmsElem.forEach(item => {
+                if (cmsSelect.selectedIndex === 1) {
+                    appData.cmsProcent[cmsSelect[cmsSelect.selectedIndex].textContent] = +cmsSelect[cmsSelect.selectedIndex].value;
+                    appData.cmsProcentPrice = +cmsSelect[cmsSelect.selectedIndex].value;
+                };
+
+                if (cmsSelect.selectedIndex === 2) {
+                    appData.cmsProcent[cmsSelect[cmsSelect.selectedIndex].textContent] = +inputCmsProcent.value;
+                    appData.cmsProcentPrice = +inputCmsProcent.value;
+                };
             });
         },
 
@@ -140,10 +163,17 @@ const appData = {
                 };
             });
 
-            if (protect === true) {
-                screenElem.forEach(item => {
-                    item.querySelector('select').disabled = true;
-                    item.querySelector('input').disabled = true;
+            if (protect === true) {  
+                document.querySelectorAll('[name="views-select"]').forEach(item => {
+                    item.disabled = true;
+                });
+
+                document.querySelectorAll('[type="text"]').forEach(item => {
+                    item.disabled = true;
+                });
+
+                customCheckbox.forEach(item => {
+                    item.disabled = true;
                 });
 
                 startBtn.style.display = 'none';
@@ -153,6 +183,9 @@ const appData = {
                 appData.asking();
                 appData.fooProgram.showPrice();
             };
+
+            screenBtn.disabled = true;
+            inputRange.disabled = true;
 
             appData.screens = [];
             appData.servicesNumber = {};
@@ -184,13 +217,26 @@ const appData = {
                 select.selectedIndex = 0;
                 input.value = '';
             });
-
-            document.querySelectorAll('.custom-checkbox').forEach(item => {
+            
+            customCheckbox.forEach(item => {
+                item.disabled = false;
                 item.checked = false;
             });
 
+            document.querySelectorAll('[name="views-select"]').forEach(item => {
+                item.disabled = false;
+            });
+
+            document.querySelectorAll('[type="text"]').forEach(item => {
+                item.disabled = false;
+            });
+
+            screenBtn.disabled = false;
+            inputRange.disabled = false;
+
             startBtn.style.display = '';
             resetBtn.style.display = 'none';
+            hiddenCmsVariants.style.display = 'none';
 
             appData.screens = [];
             appData.servicesNumber = {};
@@ -210,15 +256,30 @@ const appData = {
 
             spanRange.textContent = '0%';
             inputRange.value = 0;
-            
+        },
+
+        cmsWork: () => {
+            cmsOpen.addEventListener('input', () => {
+                if (cmsOpen.checked === true) {
+                    hiddenCmsVariants.style.display = 'flex';
+
+                    cmsSelect.addEventListener('input', () => {
+                        cmsSelect.selectedIndex === 2 ? mainControlsInput.style.display = 'flex' : mainControlsInput.style.display = 'none';
+                    }); 
+                } else {
+                    hiddenCmsVariants.style.display = 'none';
+                };
+
+            });
         },
 
         init: function() {
             this.addTitle();
             this.rollbackInput();
+            this.cmsWork();
             screenBtn.addEventListener('click', this.addinputScreen);
             startBtn.addEventListener('click', this.addScreen);
-            resetBtn.addEventListener('click', this.reset)
+            resetBtn.addEventListener('click', this.reset);
         },
     },
 };   
