@@ -285,3 +285,77 @@ const appData = {
 };   
 
 appData.start();
+
+const Person = function(name, age, jobs) {
+    this.name = name;
+    this.age = age;
+    this.jobs = jobs;
+};
+
+Person.prototype.showJobs = function() {
+    console.log(`Я работаю в ${this.jobs}`);
+};
+
+const one = new Person('anzor', 21, 'OZON');
+
+class Person1 {
+    constructor(name, age, jobs) {
+        this.name = name;
+        this.age = age;
+        this.jobs = jobs;
+    };
+
+    showJobs() {
+        console.log(`Я работаю ${this.jobs}`);
+    };
+};
+
+const two = new Person1('Vika', 23, 'OZON');
+
+class Dev extends Person1 {
+    constructor(name, age, jobs, arr = []) {
+        super(name, age, jobs)
+        this._arr = arr;
+    };
+
+    get arr() {
+        return this._arr;
+    };
+
+    set arr(text) {
+        this.arr.push(text);
+    };
+};
+
+const three = new Dev('Jenya', 32, 'Tinkoff');
+three.arr = 'beautifle';
+three.arr = 'strong';
+
+
+///////////////////
+
+const obj = {
+    name: 'anzor',
+    age: 21,
+    jobs: 'OZON',
+};
+
+/* function foo(name, age, jobs) {
+    console.log(`Я ${name}, мне ${age}, работаю в ${jobs}`);   
+};
+
+foo(obj.jobs, obj.age,obj.name); */
+
+/* function foo({age, jobs, name}) {
+    console.log(`Я ${name}, мне ${age}, работаю в ${jobs}`);   
+};
+
+foo(obj); */
+
+/////
+
+let arr22 = [1, 2, 3, 3];
+let arr222 = [4, 5, 6, 7];
+
+
+console.log([...arr22], [...arr222]);
